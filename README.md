@@ -87,3 +87,10 @@ airplane.isSupersonic;
 ```
 
 Supersonic? Super cool!
+
+Then, when you need to convert the model back to JSON to send in an API request or something similar, just call `.toJSON()`.
+
+```typescript
+airplane.toJSON();
+// { name: 'Spruce Goose', speed: 235, isFlying: false }
+```

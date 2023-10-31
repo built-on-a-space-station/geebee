@@ -81,3 +81,42 @@ it('loads an array of data', () => {
 	expect(user).toBeInstanceOf(User);
 	expect(user.names).toEqual(['Cat', 'Dog']);
 });
+
+it('serializes to JSON', () => {
+	@Entity
+	class User extends Serializable {
+		@Property('first_name', String)
+		public firstName = '';
+	}
+
+	const user = User.from({ first_name: 'Ted' });
+
+	expect(user).toEqual({ firstName: 'Ted' });
+	expect(user.toJSON()).toEqual({ first_name: 'Ted' });
+});
+
+it('serializes entity properties', () => {
+	@Entity
+	class Pet extends Serializable {
+		@Property('pet_name', String)
+		public petName = '';
+	}
+
+	@Entity
+	class User extends Serializable {
+		@Property('first_name', String)
+		public firstName = '';
+
+		@Property('pet', Pet)
+		public pet = new Pet();
+	}
+
+	const user = User.from({ first_name: 'Ted', pet: { pet_name: 'Rover' } });
+
+	expect(user.pet).toBeInstanceOf(Pet);
+
+	const json = user.toJSON();
+
+	expect(json.pet).not.toBeInstanceOf(Pet);
+	expect(json).toEqual({ first_name: 'Ted', pet: { pet_name: 'Rover' } });
+});

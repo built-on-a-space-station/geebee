@@ -14,6 +14,20 @@ it('deserializes array values', () => {
 	expect(schema.deserialize([1, 2, 3])).toEqual(['1', '2', '3']);
 });
 
+it('serializes primitive values', () => {
+	const schema = new Schema('name', 'name', String);
+
+	expect(schema.serialize('test')).toBe('test');
+	expect(schema.serialize(1)).toBe('1');
+});
+
+it('serializes array values', () => {
+	const schema = new Schema('name', 'name', [String]);
+
+	expect(schema.serialize(['a', 'b', 'c'])).toEqual(['a', 'b', 'c']);
+	expect(schema.serialize([1, 2, 3])).toEqual(['1', '2', '3']);
+});
+
 it('throws an error if provided a non array value as an array type', () => {
 	const schema = new Schema('name', 'name', [String]);
 
