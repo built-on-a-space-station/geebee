@@ -1,6 +1,6 @@
 # Geebee
 
-*Easy, breezy data entities just the way you like it.*
+_Easy, breezy data entities just the way you like it._
 
 ## Overview
 
@@ -8,26 +8,26 @@ Say you have a ~~`User`~~ `Airplane` entity in your app! The data for said airpl
 
 ```typescript
 const airplane = {
-  speed: 150,
-  color: 'red',
-  make: 'Gee Bee',
-  model: 'R2'
-}
+	speed: 150,
+	color: 'red',
+	make: 'Gee Bee',
+	model: 'R2',
+};
 ```
 
 i.e. raw JSON data that is used to display and mutate data. This is troublesome as there's no inherent validation. There's no calculated values. You also might have something like:
 
 ```typescript
 const airplane = {
-  jet_speed: 600,
-  is_supersonic: true,
-  name: 'Bell Orange Thing'
-}
+	jet_speed: 600,
+	is_supersonic: true,
+	name: 'Bell Orange Thing',
+};
 ```
 
 Snake case in your JavaScript!? Yuck!
 
-Wouldn't it be great if you could use *JavaScript classes* to wrap and handle logic within these entities? Something to handle the fact that server data might not be formatted exactly in the way you want? Well, with **Geebee** you can!
+Wouldn't it be great if you could use _JavaScript classes_ to wrap and handle logic within these entities? Something to handle the fact that server data might not be formatted exactly in the way you want? Well, with **Geebee** you can!
 
 ## Installation
 
@@ -43,10 +43,10 @@ pnpm add -D typescript
 
 ```json
 {
-  "compilerOptions": {
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
-  }
+	"compilerOptions": {
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true
+	}
 }
 ```
 
@@ -56,15 +56,15 @@ Create a class to define your data model:
 
 ```typescript
 class Airplane {
-  public name: string = '';
-  
-  public speed: number = 0;
-  
-  private isFlying: boolean = false;
-  
-  public get isSupersonic() {
-    return this.speed > 500;
-  }
+	public name: string = '';
+
+	public speed: number = 0;
+
+	private isFlying: boolean = false;
+
+	public get isSupersonic() {
+		return this.speed > 500;
+	}
 }
 ```
 
@@ -72,21 +72,19 @@ Now load its values during construction:
 
 ```typescript
 const airplane = new Airplane({
-  name: 'Spruce Goose',
-  speed: 235,
-  isFlying: false,
+	name: 'Spruce Goose',
+	speed: 235,
+	isFlying: false,
 });
 
-airplane.isSupersonic
+airplane.isSupersonic;
 // false
 ```
 
 You can expand upon the class to be able to load data from a JSON source.
 
 ```typescript
-const planesData = [
-  { }, { }, { }
-] 
+const planesData = [{}, {}, {}];
 
 const airplanes = Airplane.from(planesData);
 ```
