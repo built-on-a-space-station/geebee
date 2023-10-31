@@ -1,7 +1,6 @@
 import { propsKey } from './constants';
 import { Schema } from './schema';
-
-type Constructor<T> = { new (): T };
+import type { Constructor } from './types';
 
 export class Serializable {
 	public static from<T>(this: Constructor<T>, data: Record<string, any>): T {

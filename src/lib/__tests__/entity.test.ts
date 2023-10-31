@@ -2,6 +2,12 @@ import { Entity } from '../entity';
 import { Property } from '../property';
 import { Serializable } from '../serializable';
 
+it('does nothing if the map source is not found', () => {
+	class User {}
+
+	expect(Entity(User)).toBeUndefined();
+});
+
 it('creates an instance of a class', () => {
 	@Entity
 	class User extends Serializable {

@@ -1,2 +1,5 @@
 # external dependencies
 node_modules
+
+# coverage
+coverage

@@ -4,7 +4,7 @@ _Easy, breezy data entities just the way you like it._
 
 ## Overview
 
-Say you have a ~~`User`~~ `Airplane` entity in your app! The data for said airplane likely comes from a server. Or maybe it doesn't. Either way, you probably have something like:
+Say you have an ~~`User`~~ `Airplane` entity in your app! The data for said airplane likely comes from a server. Or maybe it doesn't. Either way, you probably have something like:
 
 ```typescript
 const airplane = {
@@ -32,13 +32,13 @@ Wouldn't it be great if you could use _JavaScript classes_ to wrap and handle lo
 ## Installation
 
 ```shell
-pnpm add @space-station/geebee
+npm install @space-station/geebee
 ```
 
-Geebee requires Typescript with experimental decorators enabled:
+Geebee requires TypeScript with experimental decorators enabled:
 
 ```shell
-pnpm add -D typescript
+npm install -D typescript
 ```
 
 ```json
@@ -85,3 +85,5 @@ const airplane = Airplane.from({
 airplane.isSupersonic;
 // false
 ```
+
+Supersonic? Super cool!
