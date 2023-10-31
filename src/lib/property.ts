@@ -1,4 +1,5 @@
 import { Schema } from './schema';
+import { propsKey} from './constants'
 
 export function Property(from: string, type: any) {
 	return (prototype: any, name: string) => {

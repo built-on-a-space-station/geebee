@@ -1,3 +1,5 @@
+import { entityKey } from './constants';
+
 export class Schema {
 	private asArray = false;
 	private type: any;

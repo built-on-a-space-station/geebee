@@ -1,3 +1,4 @@
+import { propsKey } from './constants';
 import { Schema } from './schema';
 
 type Constructor<T> = { new (): T }

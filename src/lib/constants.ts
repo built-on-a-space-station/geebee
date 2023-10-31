@@ -1,2 +1,2 @@
-const propsKey = Symbol('properties');
-const entityKey = Symbol('entity');
+export const propsKey = Symbol('properties');
+export const entityKey = Symbol('entity');
