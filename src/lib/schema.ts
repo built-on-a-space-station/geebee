@@ -11,10 +11,10 @@ export class Schema {
 	) {
 		if (Array.isArray(type)) {
 			this.asArray = true;
-			this.type = type[0]
+			this.type = type[0];
 
 			if (!this.type) {
-				throw new Error(`No array type provided for property: ${name}`)
+				throw new Error(`No array type provided for property: ${name}`);
 			}
 		} else {
 			this.type = type;
@@ -24,13 +24,15 @@ export class Schema {
 	deserialize(value: any) {
 		if (this.asArray) {
 			if (!Array.isArray(value)) {
-				throw new Error(`Non-array value provided for array type serializer: ${this.name}`)
+				throw new Error(
+					`Non-array value provided for array type serializer: ${this.name}`,
+				);
 			}
 
-			return value.map(data => this.deserializeWith(data))
+			return value.map((data) => this.deserializeWith(data));
 		}
 
-		return this.deserializeWith(value)
+		return this.deserializeWith(value);
 	}
 
 	private deserializeWith(value: any) {

@@ -1,9 +1,6 @@
 import { entityKey, propsKey } from './constants';
 import { Schema } from './schema';
 
-
-
-
 export function Entity(ctor: any) {
 	if (!(entityKey in ctor)) {
 		Object.defineProperty(ctor, entityKey, {
@@ -33,6 +30,3 @@ export function Entity(ctor: any) {
 
 	source.clear();
 }
-
-
-

@@ -1,7 +1,7 @@
 import { propsKey } from './constants';
 import { Schema } from './schema';
 
-type Constructor<T> = { new (): T }
+type Constructor<T> = { new (): T };
 
 export class Serializable {
 	public static from<T>(this: Constructor<T>, data: Record<string, any>): T {
@@ -25,8 +25,10 @@ export class Serializable {
 		return entity;
 	}
 
-  public static many
-  <T>(this: Constructor<T>, array: Record<string, any>[]): T[] {
-    return array.map(data => (this as any).from(data))
-  }
+	public static many<T>(
+		this: Constructor<T>,
+		array: Record<string, any>[],
+	): T[] {
+		return array.map((data) => (this as any).from(data));
+	}
 }
