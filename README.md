@@ -94,3 +94,10 @@ Then, when you need to convert the model back to JSON to send in an API request 
 airplane.toJSON();
 // { name: 'Spruce Goose', speed: 235, isFlying: false }
 ```
+
+## Features Added for 1.0 Release
+
+- Notation of required/nullable fields
+- Error specification
+- Advanced serialization
+- Object factories
