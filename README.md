@@ -44,23 +44,28 @@ pnpm add -D typescript
 ```json
 {
 	"compilerOptions": {
-		"experimentalDecorators": true,
-		"emitDecoratorMetadata": true
+		"experimentalDecorators": true
 	}
 }
 ```
 
 ## Basic Usage
 
-Create a class to define your data model:
+Create a class to define your data model. Then, decorate and extend the class to add all of geebee's functionality
 
 ```typescript
-class Airplane {
-	public name: string = '';
+import { Entity, Property, Serializable } from '@space-station/geebee';
 
-	public speed: number = 0;
+@Entity
+class Airplane extends Serializable {
+	@Property('name', String)
+	public name = '';
 
-	private isFlying: boolean = false;
+	@Property('speed', Number)
+	public speed = 0;
+
+	@Property('isFlying', Boolean)
+	private isFlying = false;
 
 	public get isSupersonic() {
 		return this.speed > 500;
@@ -71,7 +76,7 @@ class Airplane {
 Now load its values during construction:
 
 ```typescript
-const airplane = new Airplane({
+const airplane = Airplane.from({
 	name: 'Spruce Goose',
 	speed: 235,
 	isFlying: false,
@@ -79,20 +84,4 @@ const airplane = new Airplane({
 
 airplane.isSupersonic;
 // false
-```
-
-You can expand upon the class to be able to load data from a JSON source.
-
-```typescript
-const planesData = [{}, {}, {}];
-
-const airplanes = Airplane.from(planesData);
-```
-
-And when you need to, turn it back into a deliverable JSON object!
-
-```typescript
-airplane.toJSON();
-
-// { name: '', speed: 245, isFlying: true }
 ```
