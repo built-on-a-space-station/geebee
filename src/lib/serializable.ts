@@ -1,5 +1,3 @@
-import { propsKey } from './constants';
-import { Schema } from './schema';
 import { open, type Constructor } from './types';
 import { getMapFrom } from './utils';
 
@@ -33,10 +31,8 @@ export class Serializable {
 		const entity = new this();
 
 		for (const schema of map.values()) {
-			if (schema.from in data) {
-				const value = schema.deserialize(data[schema.from]);
-				Object.assign(open(entity), { [schema.name]: value });
-			}
+			const value = schema.deserialize(data[schema.from]);
+			Object.assign(open(entity), { [schema.name]: value });
 		}
 
 		return entity;

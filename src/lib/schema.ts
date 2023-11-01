@@ -4,13 +4,13 @@ import { Constructor, open } from './types';
 type SerializerFn = (...data: any[]) => any;
 type Serializer = SerializerFn | Constructor<any>;
 
-export type Require = Error | ((message: string) => void) | null | false;
+export type Require = Constructor<Error> | ((message: string) => void) | false;
 
 export class Schema {
 	private asArray = false;
 	private type: Serializer;
 
-	public require: Require = Error;
+	public require: Require = false;
 
 	constructor(
 		public name: string,
@@ -58,7 +58,19 @@ export class Schema {
 	}
 
 	private deserializeWith(value: any) {
-		if (entityKey in this.type) {
+		if (value === null || value === undefined) {
+			if (this.require === Error) {
+				throw new Error(
+					`Value \`${value}\` received for required field '${this.name}'`,
+				);
+			}
+
+			if (typeof this.require === 'function') {
+				open(this.require)(value);
+			}
+		}
+
+		if (this.isEntity()) {
 			return open(this.type).from(value);
 		}
 
@@ -70,7 +82,7 @@ export class Schema {
 	}
 
 	private serializeWith(value: any) {
-		if (entityKey in this.type) {
+		if (this.isEntity()) {
 			return value.toJSON();
 		}
 
@@ -79,5 +91,9 @@ export class Schema {
 		}
 
 		throw new Error(`Invalid type provided to serializer: ${this.type}`);
+	}
+
+	private isEntity() {
+		return entityKey in this.type;
 	}
 }

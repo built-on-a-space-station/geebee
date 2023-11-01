@@ -1,5 +1,6 @@
 import { Entity } from '../entity';
 import { Property } from '../property';
+import { Required } from '../required';
 import { Serializable } from '../serializable';
 
 it('does nothing if the map source is not found', () => {
@@ -134,4 +135,40 @@ it('serializes entity properties', () => {
 
 	expect(json.pet).not.toBeInstanceOf(Pet);
 	expect(json).toEqual({ first_name: 'Ted', pet: { pet_name: 'Rover' } });
+});
+
+it('throws an error if a required property does not exist', () => {
+	@Entity
+	class Pet extends Serializable {
+		@Required()
+		@Property('name', String)
+		public name = '';
+	}
+
+	expect(() => Pet.from({})).toThrow();
+});
+
+it('throws an error if a required property is null', () => {
+	@Entity
+	class Pet extends Serializable {
+		@Required()
+		@Property('name', String)
+		public name = '';
+	}
+
+	expect(() => Pet.from({ name: null })).toThrow();
+});
+
+it('executes a function for a missing required property', () => {
+	const fn = jest.fn();
+
+	@Entity
+	class Pet extends Serializable {
+		@Required(fn)
+		@Property('name', String)
+		public name = '';
+	}
+
+	expect(() => Pet.from({ name: null })).not.toThrow();
+	expect(fn).toHaveBeenCalledTimes(1);
 });

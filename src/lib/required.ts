@@ -8,7 +8,7 @@ export function Required(require: Require = Error) {
 
 		if (!schema) {
 			throw new Error(
-				`\`@Required\` decorator for ${prototype.name}.${name} must follow @Property`,
+				`\`@Required\` decorator for ${prototype.name}.${name} must precede \`@Property\``,
 			);
 		}
 

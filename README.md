@@ -135,15 +135,12 @@ const airplane = Airplane.from({ speed: 200 });
 
 You can pass an option to `@Required` to control how `null` or absent values are handled:
 
-| Type                            | Description                                                        |
-| ------------------------------- | ------------------------------------------------------------------ |
-| `Error` or descendant (default) | Will throw the error with a detailed error message                 |
-| Any other function              | Will call the function with a detailed error message               |
-| `null`                          | Will invalidate the entity and return `null` for the entire object |
-| `false`                         | No validation will be performed and the default value will be used |
+| Type           | Description                                                                                  |
+| -------------- | -------------------------------------------------------------------------------------------- |
+| `Error`        | Will throw the error with a detailed error message                                           |
+| Any `Function` | Will call the function with a detailed error message and set the value to the provided value |
 
 ## Features Added for 1.0 Release
 
-- Error specification
 - Advanced serialization
 - Object factories
