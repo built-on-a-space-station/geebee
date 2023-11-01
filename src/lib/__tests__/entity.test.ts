@@ -111,6 +111,48 @@ it('serializes to JSON', () => {
 	expect(user.toJSON()).toEqual({ first_name: 'Ted' });
 });
 
+it('serializes to JSON with a different serializer', () => {
+	@Entity
+	class User extends Serializable {
+		@Property('age', Number, String)
+		public age = 1;
+	}
+
+	const user = User.from({ age: '21' });
+
+	expect(user).toEqual({ age: 21 });
+	expect(user.toJSON()).toEqual({ age: '21' });
+});
+
+it('serializes an array', () => {
+	const up = (val: string) => val.split(',').map(Number);
+	const down = (val: string[]) => val.join(',');
+
+	@Entity
+	class User extends Serializable {
+		@Property('ages', up, down)
+		public ages: number[] = [];
+	}
+
+	const user = User.from({ ages: '1,2,3' });
+
+	expect(user).toEqual({ ages: [1, 2, 3] });
+	expect(user.toJSON()).toEqual({ ages: '1,2,3' });
+});
+
+it('serializes an array', () => {
+	@Entity
+	class User extends Serializable {
+		@Property('ages', [Number], [String])
+		public ages: number[] = [];
+	}
+
+	const user = User.from({ ages: ['1', '2', '3'] });
+
+	expect(user).toEqual({ ages: [1, 2, 3] });
+	expect(user.toJSON()).toEqual({ ages: ['1', '2', '3'] });
+});
+
 it('serializes entity properties', () => {
 	@Entity
 	class Pet extends Serializable {

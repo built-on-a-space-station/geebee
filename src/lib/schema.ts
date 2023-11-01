@@ -2,35 +2,49 @@ import { entityKey } from './constants';
 import { Constructor, open } from './types';
 
 type SerializerFn = (...data: any[]) => any;
-type Serializer = SerializerFn | Constructor<any>;
+export type Serializer = SerializerFn | Constructor<any>;
 
 export type Require = Constructor<Error> | ((message: string) => void) | false;
 
 export class Schema {
-	private asArray = false;
-	private type: Serializer;
+	private deserializeArray = false;
+	private serializeArray = false;
+	private serializer: Serializer;
+	private deserializer: Serializer;
 
 	public require: Require = false;
 
 	constructor(
 		public name: string,
 		public from: string,
-		type: Serializer | [Serializer],
+		deserializer: Serializer | [Serializer],
+		serializer?: Serializer | [Serializer],
 	) {
-		if (Array.isArray(type)) {
-			this.asArray = true;
-			this.type = type[0];
+		if (Array.isArray(deserializer)) {
+			this.deserializeArray = true;
+			this.deserializer = deserializer[0];
 		} else {
-			this.type = type;
+			this.deserializer = deserializer;
 		}
 
-		if (!this.type) {
+		if (!serializer) {
+			serializer = deserializer;
+		}
+
+		if (Array.isArray(serializer)) {
+			this.serializeArray = true;
+			this.serializer = serializer[0];
+		} else {
+			this.serializer = serializer;
+		}
+
+		if (!this.deserializer) {
 			throw new Error(`No array type provided for property: ${name}`);
 		}
 	}
 
 	deserialize(value: any) {
-		if (!this.asArray) {
+		if (!this.deserializeArray) {
 			return this.deserializeWith(value);
 		}
 
@@ -44,7 +58,7 @@ export class Schema {
 	}
 
 	serialize(value: any) {
-		if (!this.asArray) {
+		if (!this.serializeArray) {
 			return this.serializeWith(value);
 		}
 
@@ -71,14 +85,16 @@ export class Schema {
 		}
 
 		if (this.isEntity()) {
-			return open(this.type).from(value);
+			return open(this.deserializer).from(value);
 		}
 
-		if (typeof this.type === 'function') {
-			return open(this.type)(value);
+		if (typeof this.deserializer === 'function') {
+			return open(this.deserializer)(value);
 		}
 
-		throw new Error(`Invalid type provided to deserializer: ${this.type}`);
+		throw new Error(
+			`Invalid type provided to deserializer: ${this.deserializer}`,
+		);
 	}
 
 	private serializeWith(value: any) {
@@ -86,14 +102,14 @@ export class Schema {
 			return value.toJSON();
 		}
 
-		if (typeof this.type === 'function') {
-			return open(this.type)(value);
+		if (typeof this.serializer === 'function') {
+			return open(this.serializer)(value);
 		}
 
-		throw new Error(`Invalid type provided to serializer: ${this.type}`);
+		throw new Error(`Invalid type provided to serializer: ${this.serializer}`);
 	}
 
 	private isEntity() {
-		return entityKey in this.type;
+		return entityKey in this.serializer;
 	}
 }

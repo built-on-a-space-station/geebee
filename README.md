@@ -140,7 +140,22 @@ You can pass an option to `@Required` to control how `null` or absent values are
 | `Error`        | Will throw the error with a detailed error message                                           |
 | Any `Function` | Will call the function with a detailed error message and set the value to the provided value |
 
-## Features Added for 1.0 Release
+## Advanced Serialization
 
-- Advanced serialization
-- Object factories
+When decorating with `@Property` you must supply a deserialization function as the second aragument. This function will run when converting from JSON to an object. You can also supply a third argument; a _serialization_ function that will run when converting the object back to JSON.
+
+```typescript
+@Entity
+class Airplane extends Serializable {
+	@Property('speed', Number, String)
+	public speed: number = 0;
+}
+
+const airplane = Airplane.from({ speed: '200' });
+// Airplane { speed: 200 }
+
+airplane.toJSON();
+// { speed: '200' }
+```
+
+Note that you use any custom function for this besides primitive constructors, such as one that might convert the string `'1,2,3'` into an array `[1, 2, 3]`.
