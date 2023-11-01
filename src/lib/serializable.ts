@@ -42,6 +42,21 @@ export class Serializable {
 		return entity;
 	}
 
+	public static new<T>(
+		this: Constructor<T>,
+		data: Partial<{ [K in keyof T]: T[K] }>,
+	): T {
+		const entity = new this();
+
+		for (const [key, value] of Object.entries(data)) {
+			if (key in open(entity)) {
+				Object.assign(open(entity), { [key]: value });
+			}
+		}
+
+		return entity;
+	}
+
 	public static many<T>(
 		this: Constructor<T>,
 		array: Record<string, any>[],

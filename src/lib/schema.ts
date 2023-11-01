@@ -4,9 +4,13 @@ import { Constructor, open } from './types';
 type SerializerFn = (...data: any[]) => any;
 type Serializer = SerializerFn | Constructor<any>;
 
+export type Require = Error | ((message: string) => void) | null | false;
+
 export class Schema {
 	private asArray = false;
 	private type: Serializer;
+
+	public require: Require = Error;
 
 	constructor(
 		public name: string,

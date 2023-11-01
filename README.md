@@ -76,7 +76,7 @@ class Airplane extends Serializable {
 Now load its values during construction:
 
 ```typescript
-const airplane = Airplane.from({
+const airplane = Airplane.new({
 	name: 'Spruce Goose',
 	speed: 235,
 	isFlying: false,
@@ -95,9 +95,55 @@ airplane.toJSON();
 // { name: 'Spruce Goose', speed: 235, isFlying: false }
 ```
 
+## Conversion from JSON
+
+When decorating a `Property` you specify the data source key and a serializer used to convert the data. Then, use the `.from` method (instead of `.new`) to convert the JSON object.
+
+```typescript
+const data = { call_sign: 'N162142' };
+
+@Entity
+class Airplane extends Serializable {
+	@Property('call_sign', String)
+	public callSign = '';
+}
+
+const airplane = Airplane.from(data);
+// Airplane { callSign: 'N162142' }
+```
+
+## Required Properties
+
+Mark a property as `@Required` and it will fail parsing from JSON if the field is `null` or not present.
+
+```typescript
+import { Required } from '@space-station/geebee';
+
+@Entity
+class Airplane extends Serializable {
+	@Property('name', String)
+	@Required(Error)
+	public name = '';
+
+	@Property('speed', Number)
+	public speed: number | null = null;
+}
+
+const airplane = Airplane.from({ speed: 200 });
+// Error
+```
+
+You can pass an option to `@Required` to control how `null` or absent values are handled:
+
+| Type                            | Description                                                        |
+| ------------------------------- | ------------------------------------------------------------------ |
+| `Error` or descendant (default) | Will throw the error with a detailed error message                 |
+| Any other function              | Will call the function with a detailed error message               |
+| `null`                          | Will invalidate the entity and return `null` for the entire object |
+| `false`                         | No validation will be performed and the default value will be used |
+
 ## Features Added for 1.0 Release
 
-- Notation of required/nullable fields
 - Error specification
 - Advanced serialization
 - Object factories

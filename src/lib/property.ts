@@ -1,17 +1,12 @@
-import { propsKey } from './constants';
 import { Schema } from './schema';
+import { ensureMapOn } from './utils';
 
 export function Property(from: string, type: any) {
 	return (prototype: any, name: string) => {
 		const schema = new Schema(name, from, type);
 
-		if (!(prototype[propsKey] instanceof Map)) {
-			Object.defineProperty(prototype, propsKey, {
-				value: new Map<string, Schema>(),
-				writable: false,
-			});
-		}
+		const map = ensureMapOn(prototype);
 
-		prototype[propsKey].set(name, schema);
+		map.set(name, schema);
 	};
 }

@@ -8,7 +8,22 @@ it('does nothing if the map source is not found', () => {
 	expect(Entity(User)).toBeUndefined();
 });
 
-it('creates an instance of a class', () => {
+it('creates a new instance', () => {
+	@Entity
+	class User extends Serializable {
+		@Property('firstName', String)
+		public firstName: string = '';
+	}
+
+	const user = User.new({ firstName: 'Tony' });
+
+	expect(user).toBeInstanceOf(User);
+	expect(user).toEqual({
+		firstName: 'Tony',
+	});
+});
+
+it('creates an instance of a class from data', () => {
 	@Entity
 	class User extends Serializable {
 		@Property('first_name', String)
